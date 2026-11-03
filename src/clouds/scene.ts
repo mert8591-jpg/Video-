@@ -1,54 +1,20 @@
-// Bulut tüneli ve şimşeklerin, kareye bağlı (deterministik) hesapları.
-import { DURATION, FPS, STRIKES, Strike, TUNNEL_LENGTH, TWIST } from "../storyboard";
-import { mulberry32, SHAPES } from "./sprites";
+// Şimşeklerin zamanlaması, konumu ve dallı çizgileri (kareye bağlı, deterministik).
+import { SPEED, STRIKES, type Strike } from "../storyboard";
 
-export type Puff = {
-  angle0: number;
-  radius: number;
-  z0: number;
-  size: number;
-  shape: number;
-  aqua: boolean;
-  spin: number;
+export const mulberry32 = (seed: number) => {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 };
 
-const PUFF_COUNT = 900;
-const SPEED = TUNNEL_LENGTH / (DURATION / FPS); // döngü tam 13 sn'de kapanır
+export const camZ = (t: number) => SPEED * t;
 
-export const makePuffs = (): Puff[] => {
-  const rng = mulberry32(4242);
-  const puffs: Puff[] = [];
-  for (let i = 0; i < PUFF_COUNT; i++) {
-    const angle0 = rng() * Math.PI * 2;
-    // Kameranın yolunu açık bırak, etrafı tamamen bulutla doldur
-    const radius = 3.6 + Math.pow(rng(), 0.7) * 11;
-    const z0 = rng() * TUNNEL_LENGTH;
-    // Renk bölgeleri: açıya bağlı yumuşak pembe / su yeşili kuşaklar (dönüşle birlikte döner)
-    const field = Math.sin(angle0 * 2 + 0.7) + 0.55 * Math.sin(z0 * 0.09 + angle0 * 3) + (rng() - 0.5) * 0.9;
-    puffs.push({
-      angle0,
-      radius,
-      z0,
-      size: 1.8 + rng() * 2.6 + radius * 0.16,
-      shape: Math.floor(rng() * SHAPES),
-      aqua: field < 0,
-      spin: rng() * Math.PI * 2,
-    });
-  }
-  return puffs;
-};
-
-export const travelAt = (t: number) => SPEED * t;
-
-// Döngü içinde kameraya göre derinlik (z) ve açı
-export const puffState = (p: Puff, t: number) => {
-  const raw = p.z0 - travelAt(t);
-  const z = ((raw % TUNNEL_LENGTH) + TUNNEL_LENGTH) % TUNNEL_LENGTH + 0.6;
-  const angle = p.angle0 + TWIST * z * 2.2 + 0.0; // derinliğe bağlı burulma -> yaklaşırken etrafımızda döner
-  return { z, angle, x: Math.cos(angle) * p.radius, y: Math.sin(angle) * p.radius };
-};
-
-// Şimşek parlaklığı: hızlı titreşimli 2-3 çakma
+// Hızlı titreşimli 3-4 çakma
 export const strikeIntensity = (s: Strike, t: number) => {
   const d = t - s.t;
   if (d < 0 || d > 1.1) return 0;
@@ -59,16 +25,16 @@ export const strikeIntensity = (s: Strike, t: number) => {
     [0.42, 0.35],
   ];
   let v = 0;
-  for (const [at, a] of pulses) {
-    if (d >= at) v += a * Math.exp(-(d - at) / 0.06);
-  }
+  for (const [at, a] of pulses) if (d >= at) v += a * Math.exp(-(d - at) / 0.06);
   return Math.min(1.2, v) * s.power;
 };
 
-export const strikePosition = (s: Strike, t: number) => {
-  const z = s.ahead - (travelAt(t) - travelAt(s.t));
-  return { x: Math.cos(s.angle) * s.radius, y: Math.sin(s.angle) * s.radius, z };
-};
+// Dünya konumu (çakma anında kameranın önünde, bulut duvarının içinde)
+export const strikeWorld = (s: Strike) => ({
+  x: Math.cos(s.angle) * s.radius,
+  y: Math.sin(s.angle) * s.radius,
+  z: camZ(s.t) + s.ahead,
+});
 
 export type Bolt = { main: [number, number][]; branches: [number, number][][] };
 
@@ -94,22 +60,21 @@ const jagged = (rng: () => number, ax: number, ay: number, bx: number, by: numbe
   return pts;
 };
 
-// Dünya birimlerinde, şimşek merkezine göre dallı çizgi
 export const makeBolt = (s: Strike): Bolt => {
   const rng = mulberry32(s.seed * 991);
   const dir = rng() * Math.PI * 2;
   const L = 22 + rng() * 10;
   const ax = Math.cos(dir) * -L * 0.5;
   const ay = Math.sin(dir) * -L * 0.5;
-  const main = jagged(rng, ax, ay, -ax, -ay, 8, 0.5);
+  const main = jagged(rng, ax, ay, -ax, -ay, 10, 0.42);
   const branches: [number, number][][] = [];
   const count = 9 + Math.floor(rng() * 5);
   for (let i = 0; i < count; i++) {
-    const idx = 8 + Math.floor(rng() * (main.length - 16));
+    const idx = 32 + Math.floor(rng() * (main.length - 64));
     const [bx, by] = main[idx];
     const a = dir + (rng() < 0.5 ? 1 : -1) * (0.4 + rng() * 0.8);
     const bl = L * (0.12 + rng() * 0.28);
-    branches.push(jagged(rng, bx, by, bx + Math.cos(a) * bl, by + Math.sin(a) * bl, 6, 0.6));
+    branches.push(jagged(rng, bx, by, bx + Math.cos(a) * bl, by + Math.sin(a) * bl, 8, 0.5));
   }
   return { main, branches };
 };

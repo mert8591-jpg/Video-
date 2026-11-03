@@ -6,37 +6,21 @@ export const DURATION = FPS * SECONDS; // 390 kare; son kare ilk kareye kusursuz
 export const WIDTH = 1080; // Instagram Reels 9:16
 export const HEIGHT = 1920;
 
-// Renkler: pembe ve su yeşili
-export type Palette = { hi: string; mid: string; low: string; shadow: string };
+// Renkler: canlı, doygun pembe ve su yeşili (doğrusal ışık değerleri, 0..1)
+export const PINK: [number, number, number] = [1.0, 0.16, 0.58];
+export const AQUA: [number, number, number] = [0.02, 0.92, 0.78];
+export const GLOW: [number, number, number] = [0.95, 0.55, 0.9]; // tünelin sonundaki parlak pus
 
-export const PINK: Palette = {
-  hi: "#FFE3F1",
-  mid: "#F59AC8",
-  low: "#C25A97",
-  shadow: "#5E2650",
-};
-
-export const AQUA: Palette = {
-  hi: "#DFFFF7",
-  mid: "#6FE0CB",
-  low: "#2E9E98",
-  shadow: "#143F4C",
-};
-
-// Bulutların arasındaki derinlik sisi (gökyüzü yok, sadece bulut derinliği)
-export const FOG_FAR = "#5A5C94";
-export const FOG_HAZE = "#C4BDEB"; // uzaktaki bulutların karıştığı parlak pus
-export const FOG_GLOW_PINK = "#F7A8D2";
-export const FOG_GLOW_AQUA = "#7FE6D4";
-
-// Şimşek renkleri
+// Şimşek çizgisi renkleri
 export const BOLT_CORE = "#FFFFFF";
-export const BOLT_GLOW = "#E9D7FF";
+export const BOLT_GLOW = "#F3E2FF";
 
-// Uçuş
-export const TUNNEL_LENGTH = 140; // döngü başına kat edilen mesafe (dünya birimi)
-export const TWIST = 0.022; // derinliğe bağlı dönüş (radyan / birim) -> bulutlar etrafımızda döner
-export const FOCAL = 950;
+// Uçuş ve kamera
+export const SPEED = 9; // dünya birimi / sn, dümdüz ileri
+export const ROT_SPEED = 0.2; // radyan / sn (~11°/sn): bulutlar etrafımızda yavaşça döner
+export const FOV = 1.1; // shader görüş açısı çarpanı
+// Bulutların hesaplandığı çözünürlük oranı (1 = çıktı çözünürlüğü). Şimşek çizgileri her zaman tam çözünürlükte.
+export const CLOUD_RES = 0.5;
 
 // Şimşekler: zaman (sn), açı (radyan), yarıçap ve önümüzdeki mesafe
 export type Strike = { t: number; angle: number; radius: number; ahead: number; seed: number; power: number };

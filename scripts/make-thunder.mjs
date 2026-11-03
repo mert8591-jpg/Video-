@@ -58,10 +58,10 @@ const thunder = (seed, seconds, crackAmount) => {
     const fadeOut = Math.min(1, (seconds - t) / 0.6);
     out[i] = (rumble[i] * 9 * env * tail + mid[i] * 1.6 * env * tail * 0.5 + crack[i] * crackEnv * 0.35) * fadeOut;
   }
-  // Normalize (hafif: tepe -6 dBFS)
+  // Normalize (tepe ~ -1 dBFS; hafiflik bileşendeki ses seviyesiyle ayarlanır)
   let peak = 0;
   for (const v of out) peak = Math.max(peak, Math.abs(v));
-  const gain = 0.5 / (peak || 1);
+  const gain = 0.89 / (peak || 1);
   // Stereo: iki kanalda küçük gecikme -> geniş, doğal ses
   const delay = Math.floor(RATE * 0.012);
   const buf = Buffer.alloc(44 + n * 4);
