@@ -33,6 +33,11 @@ Not: Bu bulut ortamında kullanıcı Remotion Studio önizlemesini açamaz. Öni
 skill'leridir (kaynak: github.com/anthropics/skills, commit ca45fc4, Apache 2.0).
 Video tasarımında görsel yön ve hazır renk/font temaları için kullanılır.
 
+## Bağlantılar
+
+Diğer uygulamaları (connector, API anahtarı) bağlama planı ve durumu `docs/baglanti-plani.md`
+içindedir. Yeni oturumda önce onu oku.
+
 ## Kalite hedefi
 
 Kullanıcı 4K kaliteli video istiyor: 1080p ölçülerle tasarla, final render'ı `--scale=2`
