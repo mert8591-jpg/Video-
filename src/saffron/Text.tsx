@@ -197,7 +197,7 @@ export const FactCard: React.FC<{ start: number; end: number; big: string; small
       >
         <div style={{ fontFamily, fontWeight: 700, fontSize: 38, color: "rgba(255,255,255,0.9)" }}>{sub}</div>
         <div style={{ display: "flex", alignItems: "baseline", gap: 22 }}>
-          <div style={{ fontFamily, fontWeight: 900, fontSize: 150, lineHeight: 1.05, color: SAF_COLORS.gold }}>
+          <div style={{ fontFamily, fontWeight: 900, fontSize: big.length > 3 ? 112 : 150, lineHeight: 1.05, color: SAF_COLORS.gold }}>
             {big}
           </div>
           <div style={{ fontFamily, fontWeight: 900, fontSize: 64, color: SAF_COLORS.white }}>{small}</div>
