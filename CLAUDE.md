@@ -26,3 +26,15 @@ esas alınır; `remotion-video` ise bu projenin iş akışı ve kalite kurallar�
 
 Not: Bu bulut ortamında kullanıcı Remotion Studio önizlemesini açamaz. Önizleme için
 `npx remotion still` ile kare görüntüleri veya kısa bir mp4 render alıp kullanıcıya gönder.
+
+## Tasarım skill'leri
+
+`.claude/skills/frontend-design` ve `.claude/skills/theme-factory` Anthropic'in resmi
+skill'leridir (kaynak: github.com/anthropics/skills, commit ca45fc4, Apache 2.0).
+Video tasarımında görsel yön ve hazır renk/font temaları için kullanılır.
+
+## Kalite hedefi
+
+Kullanıcı 4K kaliteli video istiyor: 1080p ölçülerle tasarla, final render'ı `--scale=2`
+ile al (bkz. `remotion-video` Bölüm 7). Kullanıcının bütçesi kısıtlı: önce birkaç still
+kare göster, onay alınca render al; gereksiz tekrar render'lardan kaçın.

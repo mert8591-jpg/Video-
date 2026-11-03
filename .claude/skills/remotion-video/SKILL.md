@@ -145,7 +145,7 @@ export const Main: React.FC<z.infer<typeof mainSchema>> = ({ title, accent }) =>
 
 | Kullanım             | Boyut      | FPS | Not                              |
 |----------------------|------------|-----|----------------------------------|
-| YouTube / yatay      | 1920×1080  | 30  | 4K için 3840×2160 veya `--scale=2` |
+| YouTube / yatay      | 1920×1080  | 30  | 4K için `--scale=2` (bkz. Bölüm 7) |
 | Reels/Shorts/TikTok  | 1080×1920  | 30  | Üst/alt güvenli alan bırak       |
 | Instagram kare       | 1080×1080  | 30  |                                  |
 | Akıcı hareket/oyun   | 1920×1080  | 60  | Render süresi 2 kat              |
@@ -160,3 +160,34 @@ npx remotion render Main out/video.mp4 --codec=h264 --crf=18   # kaliteli final
 ```
 
 Render ayrıntıları ve kalite ayarları: `references/rendering.md`.
+
+## 7. 4K video
+
+Kompozisyonu **1920×1080 (dikeyde 1080×1920)** olarak tasarla, render'da `--scale=2` ver.
+Böylece tüm ölçüler 1080p'ye göre yazılır, çıktı 3840×2160 olur. Metin ve vektörler
+gerçekten keskin çıkar, çünkü tarayıcı 2 kat piksel yoğunluğunda çizer.
+
+```bash
+npx remotion render Main out/video-4k.mp4 --scale=2 --codec=h264 --crf=16 \
+  --image-format=png --audio-bitrate=320k
+```
+
+4K'nın gerçekten keskin görünmesi için:
+- **Görseller ve videolar en az 3840 px genişliğinde olmalı.** Düşük çözünürlüklü fotoğraf
+  4K'da bulanık görünür. Kullanıcının verdiği görsel küçükse bunu ona söyle.
+- **Vektör kullan**: logo ve ikonlar SVG olsun, PNG değil.
+- **İnce çizgilerden kaçın**: 1 px çizgiler titreyebilir, en az 2 px kullan.
+- **Gradyanlarda banding**: `--crf=16` ve hafif grain/noise dokusu kullan.
+- **Önce 1080p taslak al** (`--scale=1`, hızlı), beğenilince 4K final render'ı al.
+  4K render 1080p'ye göre yaklaşık 3–4 kat uzun sürer.
+- Doğrulama: `ffprobe` ile 3840×2160 olduğunu kontrol et (`video-quality-check`).
+- Dosya büyük olur (30 sn ≈ 100–300 MB). Paylaşım için gerekirse
+  `--codec=h265 --crf=20` ile daha küçük bir kopya da çıkar.
+
+## 8. Tasarım kalitesi
+
+Görsel yön (renk, font, kompozisyon) belirlerken `frontend-design` skill'indeki
+ilkeleri uygula: konuya özgü, şablon gibi durmayan tercihler; tek bir akılda kalan an;
+sade ve disiplinli geri kalan her şey. Kullanıcının renk tercihi yoksa `theme-factory`
+skill'indeki hazır temalardan birini öner (`theme-showcase.pdf` dosyasını göster ve seçtir).
+Her sahnede önce still alıp görsel olarak eleştir, sonra devam et.

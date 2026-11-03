@@ -72,6 +72,7 @@ gövde `Inter` 400–600. Bir videoda en fazla 2 font ailesi.
 ## Renk ve görünüm
 
 - Bir ana renk + bir vurgu rengi + nötrler. Paleti `storyboard.ts`'te tut.
-- Düz siyah yerine çok koyu lacivert/gri (#0B0B12 gibi) daha sinematik durur.
+- Arka plan rengini konuya göre seç; her videoda aynı koyu zemine (#0B0B12 gibi) varsayılan
+  olarak dönme.
 - Hafif gradyan ve ince grain/vignette derinlik katar; abartma.
 - Metin gölgesi gerekiyorsa yumuşak: `textShadow: "0 4px 24px rgba(0,0,0,0.35)"`.
