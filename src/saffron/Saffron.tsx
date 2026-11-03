@@ -1,9 +1,9 @@
 import { Audio } from "@remotion/media";
-import { AbsoluteFill, Sequence, interpolate, random, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { HOOK, MUSIC_VOLUME, NEEDS, NEEDS_END, OUTRO_Q, SAF_DURATION, SHOTS, VO_OFFSET, XFADE } from "../storyboard";
+import { AbsoluteFill, Img, Sequence, interpolate, random, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { FACTS, HOOK, MUSIC_VOLUME, NEEDS, NEEDS_END, OUTRO_Q, SAF_DURATION, SHOTS, VO_OFFSET, XFADE } from "../storyboard";
 import { KenBurns } from "./KenBurns";
 import { Subtitles } from "./Subtitles";
-import { HookTitle, NeedsChips, Outro } from "./Text";
+import { FactCard, HookTitle, NeedsChips, Outro } from "./Text";
 
 const ShotLayer: React.FC<{ i: number }> = ({ i }) => {
   const frame = useCurrentFrame();
@@ -57,12 +57,28 @@ const Dust: React.FC = () => {
   );
 };
 
+/** Hafif film greni: büyütülmüş görsellerdeki "fazla pürüzsüz" görünümü doğal kılar */
+const Grain: React.FC = () => {
+  const frame = useCurrentFrame();
+  const dx = Math.floor(random(`gx${frame}`) * 400);
+  const dy = Math.floor(random(`gy${frame}`) * 400);
+  return (
+    <AbsoluteFill style={{ overflow: "hidden", opacity: 0.07, mixBlendMode: "overlay" }}>
+      <Img
+        src={staticFile("saffron/grain.png")}
+        style={{ position: "absolute", left: -dx, top: -dy, width: 1480, height: 2320, imageRendering: "pixelated" }}
+      />
+    </AbsoluteFill>
+  );
+};
+
 export const Saffron: React.FC = () => {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
   const t = frame / fps;
   // Üstte metin varken üst gradyanı koyulaştır (okunabilirlik)
   const topDark =
+    (t > FACTS[0].start - 0.3 && t < FACTS[1].end) ||
     t < HOOK.end || t > OUTRO_Q.start - 0.3 || (t > NEEDS[0].t - 0.3 && t < NEEDS_END)
       ? 1
       : 0.35;
@@ -85,6 +101,7 @@ export const Saffron: React.FC = () => {
           );
         })}
         <Dust />
+        <Grain />
         {/* Sinematik vinyet + metin okunabilirliği için gradyanlar */}
         <AbsoluteFill
           style={{
@@ -103,6 +120,9 @@ export const Saffron: React.FC = () => {
         <Sequence durationInFrames={Math.round(HOOK.end * fps)}>
           <HookTitle />
         </Sequence>
+        {FACTS.map((f) => (
+          <FactCard key={f.big} {...f} />
+        ))}
         <NeedsChips />
         <Outro />
         <Subtitles />

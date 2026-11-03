@@ -164,3 +164,45 @@ export const Outro: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+/** Bilgi kartı: büyük rakam + açıklama */
+export const FactCard: React.FC<{ start: number; end: number; big: string; small: string; sub: string }> = ({
+  start,
+  end,
+  big,
+  small,
+  sub,
+}) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const p = useRise(start);
+  const out = interpolate(frame, [(end - 0.35) * fps, end * fps], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return (
+    <AbsoluteFill style={{ alignItems: "center", paddingTop: 280, opacity: p * out }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "26px 56px 30px",
+          borderRadius: 32,
+          backgroundColor: "rgba(14,10,18,0.58)",
+          border: `3px solid ${SAF_COLORS.gold}`,
+          boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
+          transform: `translateY(${(1 - p) * 60}px) scale(${0.9 + 0.1 * p})`,
+        }}
+      >
+        <div style={{ fontFamily, fontWeight: 700, fontSize: 38, color: "rgba(255,255,255,0.9)" }}>{sub}</div>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 22 }}>
+          <div style={{ fontFamily, fontWeight: 900, fontSize: 150, lineHeight: 1.05, color: SAF_COLORS.gold }}>
+            {big}
+          </div>
+          <div style={{ fontFamily, fontWeight: 900, fontSize: 64, color: SAF_COLORS.white }}>{small}</div>
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};

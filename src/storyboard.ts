@@ -61,11 +61,12 @@ export const SAF_FONT = "Montserrat";
 
 // Kullanıcının görselleri (public/saffron) ve doğal boyutları
 export const IMAGES = {
-  macro: { src: "saffron/macro.jpg", w: 506, h: 900 },
-  bulb: { src: "saffron/bulb.jpg", w: 415, h: 739 },
-  farm: { src: "saffron/farm.jpg", w: 800, h: 500 },
-  hand: { src: "saffron/hand.jpg", w: 1400, h: 1400 },
-  bowl: { src: "saffron/bowl.jpg", w: 700, h: 467 },
+  // Real-ESRGAN x4 ile yapay zekâ destekli büyütülmüş sürümler (public/saffron/hq)
+  macro: { src: "saffron/hq/macro.jpg", w: 2024, h: 3600 },
+  bulb: { src: "saffron/hq/bulb.jpg", w: 1660, h: 2956 },
+  farm: { src: "saffron/hq/farm.jpg", w: 3200, h: 2000 },
+  hand: { src: "saffron/hq/hand.jpg", w: 2800, h: 2800 },
+  bowl: { src: "saffron/hq/bowl.jpg", w: 2800, h: 1868 },
 } as const;
 export type ImageKey = keyof typeof IMAGES;
 
@@ -122,3 +123,9 @@ export const NEEDS = [
   { t: vo(38.6), label: "SATIŞ PAZARI" },
 ];
 export const NEEDS_END = 37.95;
+
+// Bilgi kartları (doğrulanabilir botanik/üretim bilgileri; fiyat/kâr iddiası yok)
+export const FACTS = [
+  { start: vo(27.87) - 0.1, end: 29.05, big: "3", small: "TEPECİK", sub: "her çiçekte yalnızca" },
+  { start: 29.6, end: 32.45, big: "~150.000", small: "ÇİÇEK", sub: "1 kg kuru safran için yaklaşık" },
+];
