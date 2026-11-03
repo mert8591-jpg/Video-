@@ -16,3 +16,13 @@ Bu depo, Remotion (React) ile kod tabanlı, yüksek kaliteli video üretimi içi
 - Render çıktıları `out/` klasörüne yazılır ve commit edilmez.
 - Bu ortamda tarayıcı gerekirse: `--browser-executable=/opt/pw-browsers/chromium`.
 - Kullanıcıyla Türkçe iletişim kur.
+
+## Remotion resmi skill'leri
+
+`.claude/skills/remotion-*` (remotion-best-practices, remotion-create, remotion-markup,
+remotion-captions, remotion-render vb.) Remotion ekibinin resmi skill'leridir
+(kaynak: github.com/remotion-dev/skills, commit c7cb2fd). Remotion API ayrıntılarında bunlar
+esas alınır; `remotion-video` ise bu projenin iş akışı ve kalite kurallarıdır.
+
+Not: Bu bulut ortamında kullanıcı Remotion Studio önizlemesini açamaz. Önizleme için
+`npx remotion still` ile kare görüntüleri veya kısa bir mp4 render alıp kullanıcıya gönder.
