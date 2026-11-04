@@ -29,6 +29,20 @@ Network access "Limited" ise ilgili alan adı Allowed domains listesine eklenir.
 | Gemini | `GEMINI_API_KEY` | `generativelanguage.googleapis.com` |
 | OpenAI | `OPENAI_API_KEY` | `api.openai.com` |
 
+## Ağ izni gereken ücretsiz kaynaklar (anahtar gerekmez)
+
+4 Kasım 2026'da test edildi: bu alan adları ortamın ağ politikası tarafından engelleniyor.
+Ortam ayarları → Network access → Allowed domains listesine eklenirse açılır:
+
+| Alan adı | Ne için |
+|---|---|
+| `remotion.media` | `@remotion/sfx` ses efektleri |
+| `huggingface.co` | Whisper altyazı modelleri (`@remotion/install-whisper-cpp`) |
+| `images.pexels.com`, `api.pexels.com` | Pexels stok foto/video (API anahtarı da gerekir) |
+| `freesound.org` | Freesound ses efektleri (API anahtarı da gerekir) |
+
+Erişilebilir olanlar: `fonts.googleapis.com` (Google Fonts), `registry.npmjs.org`, `pypi.org`.
+
 ## Yeni oturumda yapılacaklar
 
 1. Hangi connector'ların ve anahtarların eklendiğini kontrol et (`ListConnectors`, `env`).
