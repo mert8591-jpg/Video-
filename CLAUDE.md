@@ -33,6 +33,36 @@ Not: Bu bulut ortamında kullanıcı Remotion Studio önizlemesini açamaz. Öni
 skill'leridir (kaynak: github.com/anthropics/skills, commit ca45fc4, Apache 2.0).
 Video tasarımında görsel yön ve hazır renk/font temaları için kullanılır.
 
+## Ses ve efekt araçları (ücretsiz, kurulu)
+
+- `npm run sfx` → `public/sfx/` altına telifsiz, kodla üretilmiş efektler: `whoosh`, `whoosh-slow`,
+  `riser`, `impact`, `sub-drop`, `swell`, `click`, `shimmer`, `glitch` (48 kHz stereo WAV).
+  Kullanım: `<Audio src={staticFile("sfx/whoosh.wav")} />`, geçişten ~0.3 sn önce başlat.
+- `npm run sfx` ile aynı mantıkta `npm run thunder` gök gürültüsü üretir.
+- `npm run master -- out/video.mp4` → sesi -14 LUFS / -1 dBTP'ye getirir (Instagram/TikTok/YouTube
+  standardı), görüntüyü yeniden kodlamaz. Final render'dan sonra, teslimden önce çalıştır.
+- Kurulu Remotion paketleri (hepsi 4.0.540, sürümler sabit tutulur): transitions, google-fonts,
+  media-utils (ses dalgası/spektrum görselleştirme), noise, shapes, paths, motion-blur,
+  light-leaks, layout-utils (fitText), captions, install-whisper-cpp (yerel ücretsiz altyazı),
+  sfx (Remotion'ın efekt URL'leri).
+- `@remotion/sfx` sesleri `remotion.media`'dan, whisper modelleri `huggingface.co`'dan iner; bu
+  ortamın ağ izninde bu alan adları yoksa çalışmaz (bkz. `docs/baglanti-plani.md`). `@remotion/sfx`
+  içindeki meme sesleri (vine-boom, spongebob vb.) telif riski taşır; yayın videolarında kullanma.
+
+## Token tasarrufu
+
+- `node_modules/`, `out/`, `package-lock.json` ve ses/video dosyalarını okuma; ses için
+  `ffprobe`/`ebur128` ölçümü, görüntü için düşük çözünürlüklü still kullan.
+- Önizleme: tam render yerine birkaç `npx remotion still --scale=0.5` karesi; kontrol amaçlı
+  görselleri tek bir ızgara görüntüde birleştirip bir kez incele.
+- Dosyanın tamamını değil gereken bölümünü oku; sabitler zaten `src/storyboard.ts` içinde.
+- Her yeni iş için yeni oturum aç; kalınan yer `docs/` altındaki notlarda tutulur.
+
+## Bağlantılar
+
+Diğer uygulamaları (connector, API anahtarı) bağlama planı ve durumu `docs/baglanti-plani.md`
+içindedir. Yeni oturumda önce onu oku.
+
 ## Kalite hedefi
 
 Kullanıcı 4K kaliteli video istiyor: 1080p ölçülerle tasarla, final render'ı `--scale=2`
