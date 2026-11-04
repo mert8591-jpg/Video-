@@ -8,8 +8,7 @@
     "still": "remotion still",
     "render": "remotion render",
     "sfx": "node scripts/make-sfx.mjs",
-    "master": "bash scripts/master-audio.sh",
-    "slime": "node scripts/make-slime-crunch.mjs"
+    "master": "bash scripts/master-audio.sh"
   },
   "dependencies": {
     "@remotion/captions": "4.0.540",
